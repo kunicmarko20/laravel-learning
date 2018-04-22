@@ -17,6 +17,7 @@
         @endif
         <div class="row">
             <div class="col-md-8">
+                @include('inc.errors')
                 @yield('content')
             </div>
             <div class="col-md-4">
