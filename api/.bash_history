@@ -1,0 +1,3 @@
+exit
+homestead --version
+exit
