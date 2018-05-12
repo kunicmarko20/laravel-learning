@@ -40,6 +40,8 @@ class User extends Authenticatable
         'verification_token',
     ];
 
+    protected $table = 'users';
+
     public function isVerified(): bool
     {
         return $this->verified == User::USER_VERIFIED;
