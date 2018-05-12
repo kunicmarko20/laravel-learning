@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -55,5 +57,52 @@ class User extends Authenticatable
     public static function generateVerificationCode()
     {
         return str_random(40);
+    }
+
+    public static function fromUserStore(UserStoreRequest $request): self
+    {
+        $user = new self();
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->updatePassword($request->password);
+        $user->verified = self::USER_UNVERIFIED;
+        $user->verification_token = self::generateVerificationCode();
+        $user->admin = self::USER_REGULAR;
+
+        $user->save();
+
+        return $user;
+    }
+
+    private function updatePassword($password)
+    {
+        $this->password = bcrypt($password);
+    }
+
+    public function updateFromUserUpdate(UserUpdateRequest $request): self
+    {
+        if ($request->has('name')) {
+            $this->name = $request->name;
+        }
+
+        if ($request->has('email')) {
+            $this->unverify();
+            $this->email = $request->email;
+        }
+
+        if ($request->has('password')) {
+            $this->updatePassword($request->get('password'));
+        }
+
+        $this->save();
+
+        return $this;
+    }
+
+    public function unverify(): void
+    {
+        $this->verified = self::USER_UNVERIFIED;
+        $this->verification_token = self::generateVerificationCode();
     }
 }

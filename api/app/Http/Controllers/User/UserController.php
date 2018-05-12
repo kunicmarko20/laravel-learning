@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(['data' => User::all()], 200);
     }
 
     /**
@@ -23,9 +26,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        //
+        return response()->json(['data' => User::fromUserStore($request)], 201);
     }
 
     /**
@@ -36,7 +39,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(['data' => User::findOrFail($id)], 200);
     }
 
     /**
@@ -46,9 +49,26 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if ($request->has('admin') && !$user->isVerified()) {
+            return response()->json([
+               'error' => 'Only verified users can modify the admin field'
+            ], 409);
+
+            $user->admin = $request->admin;
+        }
+
+        if ($user->isDirty()) {
+            return response()->json([
+                'error' => 'You need to use different value to update.'
+            ], 422);
+
+        }
+
+        return response()->json(['data' => $user->updateFromUserUpdate($request)], 200);
     }
 
     /**
@@ -59,6 +79,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::destroy($id);
+
+        return response()->json([], 204);
     }
 }
