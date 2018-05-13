@@ -51,12 +51,15 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
+        /** @var User $user */
         $user = User::findOrFail($id);
 
-        if ($request->has('admin') && !$user->isVerified()) {
-            return response()->json([
-               'error' => 'Only verified users can modify the admin field'
-            ], 409);
+        if ($request->has('admin')) {
+            if (!$user->isVerified()) {
+                return response()->json([
+                    'error' => 'Only verified users can modify the admin field'
+                ], 409);
+            }
 
             $user->admin = $request->admin;
         }

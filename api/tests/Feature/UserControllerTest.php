@@ -12,7 +12,7 @@ class UserControllerTest extends TestCase
         $response = $this->getJson('/users');
 
         $response->assertStatus(200);
-        $this->assertCount(200, $response->json('data'));
+        $this->assertCount(1000, $response->json('data'));
     }
 
     public function testShow()
@@ -78,12 +78,12 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(201);
 
-        $this->assertCount(201, User::all());
+        $this->assertCount(1001, User::all());
         $response = $this->delete('/users/' . $id = $response->json('data')['id']);
 
         $response->assertStatus(204);
 
         $this->assertNull(User::find($id));
-        $this->assertCount(200, User::all());
+        $this->assertCount(1000, User::all());
     }
 }
