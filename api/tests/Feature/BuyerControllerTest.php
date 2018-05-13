@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Buyer;
+use App\Scope\BuyerScope;
 use Tests\TestCase;
 
 class BuyerControllerTest extends TestCase
@@ -26,7 +27,7 @@ class BuyerControllerTest extends TestCase
 
     public function testShowFail()
     {
-        $buyer = Buyer::doesntHave('transactions')->get()->random();
+        $buyer = Buyer::withoutGlobalScope(BuyerScope::class)->doesntHave('transactions')->get()->random();
 
         $response = $this->getJson('/buyers/' . $buyer->id);
 

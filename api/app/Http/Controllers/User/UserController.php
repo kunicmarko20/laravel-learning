@@ -5,7 +5,6 @@ namespace App\Http\Controllers\User;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -37,9 +36,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        return response()->json(['data' => User::findOrFail($id)], 200);
+        return response()->json(['data' => $user], 200);
     }
 
     /**
@@ -49,11 +48,8 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request, User $user)
     {
-        /** @var User $user */
-        $user = User::findOrFail($id);
-
         if ($request->has('admin')) {
             if (!$user->isVerified()) {
                 return response()->json([

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Scope\SellerScope;
 use App\Seller;
 use Tests\TestCase;
 
@@ -26,7 +27,7 @@ class SellerControllerTest extends TestCase
 
     public function testShowFail()
     {
-        $seller = Seller::doesntHave('products')->get()->random();
+        $seller = Seller::withoutGlobalScope(SellerScope::class)->doesntHave('products')->get()->random();
 
         $response = $this->getJson('/sellers/' . $seller->id);
 

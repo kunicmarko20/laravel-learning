@@ -14,7 +14,7 @@ class SellerController extends Controller
      */
     public function index()
     {
-        return $this->jsonResponse(Seller::has('products')->get());
+        return $this->jsonResponse(Seller::all());
     }
 
     /**
@@ -23,8 +23,8 @@ class SellerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Seller $seller)
     {
-        return $this->jsonResponse(Seller::has('products')->findOrFail($id));
+        return $this->jsonResponse($seller);
     }
 }
