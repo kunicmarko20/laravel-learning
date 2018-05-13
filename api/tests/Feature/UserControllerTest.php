@@ -28,6 +28,7 @@ class UserControllerTest extends TestCase
         $response = $this->getJson('/users/1231231');
 
         $response->assertStatus(404);
+        $this->assertSame('User could not be found.', $response->json('message'));
     }
 
     public function testStore()
