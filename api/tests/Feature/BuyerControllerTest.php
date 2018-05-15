@@ -18,7 +18,7 @@ class BuyerControllerTest extends TestCase
 
     public function testShow()
     {
-        $buyer = Buyer::has('transactions')->get()->random();
+        $buyer = Buyer::all()->random();
         $response = $this->getJson('/buyers/' . $buyer->id);
 
         $response->assertStatus(200);
