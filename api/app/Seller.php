@@ -17,4 +17,9 @@ class Seller extends User
     {
         return $this->hasMany(Product::class);
     }
+
+    public function isSelling(Product $product): bool
+    {
+        return $this->id === $product->seller_id;
+    }
 }
