@@ -43,3 +43,4 @@ Route::resource('transactions.sellers', 'Transaction\TransactionSellerController
 Route::resource('transactions.buyers', 'Transaction\TransactionBuyerController', ['only'=> ['index']]);
 
 Route::resource('users', 'User\UserController', ['except'=> ['create', 'edit']]);
+Route::name('verify')->put('users/verify/{token}', 'User\UserController@verify');

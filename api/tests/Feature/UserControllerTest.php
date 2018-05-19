@@ -87,4 +87,14 @@ class UserControllerTest extends TestCase
         $this->assertNull(User::find($id));
         $this->assertCount(1000, User::all());
     }
+
+    public function testVerify()
+    {
+        $user = User::where('verified', '0')->get()->random();
+
+        $response = $this->putJson('/users/verify/' . $user->verification_token);
+
+        $response->assertStatus(204);
+        $this->assertSame('1', User::find($user->id)->verified);
+    }
 }

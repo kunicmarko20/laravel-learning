@@ -82,4 +82,16 @@ class UserController extends Controller
 
         return response()->json([], 204);
     }
+
+    public function verify($token)
+    {
+        $user = User::where('verification_token', $token)->firstOrFail();
+
+        $user->verified = User::USER_VERIFIED;
+        $user->verification_token = null;
+
+        $user->save();
+
+        return response()->json([], 204);
+    }
 }
