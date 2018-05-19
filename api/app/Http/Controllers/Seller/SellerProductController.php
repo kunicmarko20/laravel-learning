@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Foundation\Testing\HttpException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class SellerProductController extends Controller
 {
@@ -69,6 +70,7 @@ class SellerProductController extends Controller
             throw new HttpException(422, "Seller is not the owner of product.");
         }
 
+        Storage::delete($product->image);
         $product->delete();
 
         return response()->json([], 204);

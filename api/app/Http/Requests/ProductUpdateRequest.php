@@ -27,7 +27,7 @@ class ProductUpdateRequest extends FormRequest
         return [
             'quantity' => 'integer|min:1',
             'status' => 'in:' . Product::PRODUCT_AVAILABLE . ',' . Product::PRODUCT_UNAVAILABLE,
-            //'image' => 'image',
+            'image' => 'image',
         ];
     }
 }

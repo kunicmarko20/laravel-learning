@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Product;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class SellerProductControllerTest extends TestCase
@@ -21,6 +22,7 @@ class SellerProductControllerTest extends TestCase
             'name' => 'test',
             'description' => $description = 'some description',
             'quantity' => 11,
+            'image' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         $response->assertStatus(201);
@@ -36,6 +38,7 @@ class SellerProductControllerTest extends TestCase
             'name' => $name = 'test',
             'description' => 'some description',
             'quantity' => 11,
+            'image' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         $response->assertStatus(201);
@@ -56,6 +59,7 @@ class SellerProductControllerTest extends TestCase
             'name' => $name = 'test',
             'description' => 'some description',
             'quantity' => 11,
+            'image' => UploadedFile::fake()->image('avatar.jpg')
         ]);
 
         $response->assertStatus(201);

@@ -5,6 +5,7 @@ namespace App;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -52,7 +53,7 @@ class Product extends Model
         $product->description = $request->description;
         $product->quantity = $request->quantity;
         $product->status = self::PRODUCT_UNAVAILABLE;
-        $product->image = '1.jpg';
+        $product->image = $request->image->store('');
         $product->seller_id = $sellerId;
 
         $product->save();
@@ -76,6 +77,11 @@ class Product extends Model
 
         if ($request->has('status')) {
             $this->status = $request->status;
+        }
+
+        if ($request->hasFile('image')) {
+            Storage::delete($this->image);
+            $this->image = $request->image->store('');
         }
 
         $this->save();
